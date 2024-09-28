@@ -81,7 +81,6 @@ const Posts = (props: Props) => {
 
             <article id='blogs'>
                 {<><h2 className="text-4xl bold text-center pt-1">{item.title}</h2>
-                    <h4 className="text-center">dsfgadfgdsfgdfg</h4>
 
                     <h3 className="text-center pb-5 ">
 
