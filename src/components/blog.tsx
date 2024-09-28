@@ -7,7 +7,8 @@ import Picture from "./picture";
 import StopPicker from "./stop-picker";
 
 type Props = {
-    allPosts: any
+    allPosts: any,
+    index: string
 }
 const convert = (item: any): BlogPost => {
     const blog: any = { ...item };
@@ -32,6 +33,7 @@ const Posts = (props: Props) => {
     const [ready, setReady] = useState(false)
 
     useEffect(() => {
+        selectItem(parseInt(props.index));
         setReady(true);
     }, [])
 

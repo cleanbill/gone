@@ -5,7 +5,7 @@ export default function Home({ params }: { params: { id: string } }) {
 
   return (
     <main className="flex min-h-screen flex-col items-center max-w-fit">
-      <Posts allPosts={allPosts}></Posts>
+      <Posts index={params.id} allPosts={allPosts}></Posts>
     </main >
   );
 }
