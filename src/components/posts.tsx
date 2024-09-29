@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import LinkRender from "./linkRender";
 import Picture from "./picture";
 import StopPicker from "./stop-picker";
+import useSwipe from "@/utils/useSwipe";
 
 type Props = {
     allPosts: any,
@@ -68,8 +69,27 @@ const Posts = (props: Props) => {
         return '';
     }
 
+    const displayShort = (dateObj: any): string => {
+        const date = dateObj instanceof Date ? dateObj : new Date(dateObj);
+        const options = {
+            dateStyle: 'short',
+            timeStyle: 'short',
+        };
+
+        try {
+            // @ts-ignore
+            const output = new Intl.DateTimeFormat('en-GB', options).format(date);// Should use react-intl
+            return output;
+        } catch (er) {
+            console.error('trying to display', date, er);
+        }
+        return '';
+    }
+
+    const swipeHandlers = useSwipe({ onSwipedLeft: () => selectItem(previous), onSwipedRight: () => selectItem(next) });
+
     return (
-        ready && <div className="lg:grid lg:grid-cols-[0.5fr,12fr]">
+        ready && <div {...swipeHandlers} className="lg:grid lg:grid-cols-[0.5fr,12fr]">
             <div className="hidden lg:block text-4xl pl-1 pt-10">
 
                 <div className="text-xs">
@@ -96,21 +116,21 @@ const Posts = (props: Props) => {
                             Next ❯
                         </button>}
                     </h3>
-                    <h3 className="lg:hidden text-center pb-5 ">
-
-                        {index > FIRST_BLOG && <button title={"" + (index - 1)} className=" text-gray-500 bg-sky-200 hover:bg-blue-200 focus:outline-none focus:ring 
+                    <h3 className="lg:hidden text-center pb-5 w-full ">
+                        <span className="grid grid-cols-[0fr,11fr,0fr]">
+                            {index > FIRST_BLOG && <button title={"" + (index - 1)} className=" float-left text-gray-500 bg-sky-200 hover:bg-blue-200 focus:outline-none focus:ring 
 focus:ring-yellow-300 rounded-xl m-3 p-3" onClick={() => selectItem(previous)} >
-                            ❮
-                        </button>}
-                        {display(item.date)}
-                        {index < LAST_BLOG && <button title={"" + next} className=" text-gray-500 bg-sky-200 hover:bg-blue-200 focus:outline-none focus:ring 
-focus:ring-yellow-300 rounded-xl m-3 p-3" onClick={() => selectItem(next)}>
-                            ❯
-                        </button>}
+                                ❮
+                            </button>}
+                            <div className="mt-5 text-3xl">{displayShort(item.date)}</div>
+                            {index < LAST_BLOG && <button title={"" + next} className="float-right text-gray-500 bg-sky-200 hover:bg-blue-200 focus:outline-none focus:ring focus:ring-yellow-300 rounded-xl m-3 p-3" onClick={() => selectItem(next)}>
+                                ❯
+                            </button>}
+                        </span>
                     </h3>
                 </>}
 
-                <div className={item.description.length > 0 ? "lg:ml-40 lg:mr-40 lg:grid lg:grid-cols-[5fr,7fr]" : "lg:mid"} >
+                <div className={item.description.length > 0 ? "ml-1 mr-1 lg:ml-40 lg:mr-40 lg:grid lg:grid-cols-[5fr,7fr]" : "lg:mid"} >
 
                     {item.description.length > 0 &&
                         <div id={'desc-' + index}>
@@ -134,7 +154,7 @@ focus:ring-yellow-300 rounded-xl m-3 p-3" onClick={() => selectItem(next)}>
 
                     {item.images.length > 0 && <div id={'images' + index}>
                         {item.images.map((image: string) => (
-                            <div key={image} className="justify-self-center">
+                            <div id="link-pictures" key={image} className="justify-self-center">
                                 <Link href={image} target='_page'>
                                     <Picture image={image} alt={image}></Picture>
                                 </Link>
@@ -142,7 +162,7 @@ focus:ring-yellow-300 rounded-xl m-3 p-3" onClick={() => selectItem(next)}>
                         ))}
                     </div>}
 
-                    {item.links.length > 0 && <div>
+                    {item.links.length > 0 && <div id="links">
                         {item.links.map((link: LinkParts) => (
                             <div key={link.linkAttributes.href} className="justify-self-center">
                                 <LinkRender link={link}></LinkRender>
@@ -151,7 +171,7 @@ focus:ring-yellow-300 rounded-xl m-3 p-3" onClick={() => selectItem(next)}>
                     </div>}
 
                     {item.videos.map((vid: string) => (
-                        <div key={vid} className=" m-2 justify-self-center">
+                        <div id="videos" key={vid} className=" m-2 justify-self-center">
                             <Link href={vid} target='_page'>
                                 <div title={vid} className="text-center">-</div></Link>
                             <video src={'../' + vid} controls>
