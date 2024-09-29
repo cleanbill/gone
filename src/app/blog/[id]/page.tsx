@@ -1,5 +1,5 @@
 import allPosts from '@/data/allclean.json';
-import Posts from "@/components/blog";
+import Posts from "@/components/posts";
 
 export default function Home({ params }: { params: { id: string } }) {
 

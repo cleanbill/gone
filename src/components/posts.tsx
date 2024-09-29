@@ -69,8 +69,8 @@ const Posts = (props: Props) => {
     }
 
     return (
-        ready && <div className="grid grid-cols-[0.5fr,12fr]">
-            <div className="text-4xl pl-1 pt-10">
+        ready && <div className="lg:grid lg:grid-cols-[0.5fr,12fr]">
+            <div className="hidden lg:block text-4xl pl-1 pt-10">
 
                 <div className="text-xs">
                     <StopPicker picked={selectItem}></StopPicker>
@@ -84,7 +84,7 @@ const Posts = (props: Props) => {
             <article id='blogs'>
                 {<><h2 className="text-4xl bold text-center pt-1">{item.title}</h2>
 
-                    <h3 className="text-center pb-5 ">
+                    <h3 className="hidden lg:block text-center pb-5 ">
 
                         {index > FIRST_BLOG && <button title={"" + (index - 1)} className=" text-gray-500 bg-sky-200 hover:bg-blue-200 focus:outline-none focus:ring 
                  focus:ring-yellow-300 rounded-xl m-3 p-3" onClick={() => selectItem(previous)} >
@@ -96,9 +96,21 @@ const Posts = (props: Props) => {
                             Next ❯
                         </button>}
                     </h3>
+                    <h3 className="lg:hidden text-center pb-5 ">
+
+                        {index > FIRST_BLOG && <button title={"" + (index - 1)} className=" text-gray-500 bg-sky-200 hover:bg-blue-200 focus:outline-none focus:ring 
+focus:ring-yellow-300 rounded-xl m-3 p-3" onClick={() => selectItem(previous)} >
+                            ❮
+                        </button>}
+                        {display(item.date)}
+                        {index < LAST_BLOG && <button title={"" + next} className=" text-gray-500 bg-sky-200 hover:bg-blue-200 focus:outline-none focus:ring 
+focus:ring-yellow-300 rounded-xl m-3 p-3" onClick={() => selectItem(next)}>
+                            ❯
+                        </button>}
+                    </h3>
                 </>}
 
-                <div className={item.description.length > 0 ? "ml-40 mr-40 grid grid-cols-[5fr,7fr]" : "mid"} >
+                <div className={item.description.length > 0 ? "lg:ml-40 lg:mr-40 lg:grid lg:grid-cols-[5fr,7fr]" : "lg:mid"} >
 
                     {item.description.length > 0 &&
                         <div id={'desc-' + index}>
@@ -108,7 +120,7 @@ const Posts = (props: Props) => {
                             {item.comments.length > 0 &&
                                 <div className="m-10 w-10/12">
                                     {item.comments.map((comment: any, commentIndex: number) => (
-                                        <div key={'bc-' + index + commentIndex} className="grid grid-cols-[4.5fr,1fr,10fr] gap-5 mt-3 ">
+                                        <div key={'bc-' + index + commentIndex} className="lg:grid lg:grid-cols-[4.5fr,1fr,10fr] lg:gap-5 mt-3 ">
                                             <div className="">{display(comment.date)}</div>
                                             <div className="font-bold">{comment.author}</div>
                                             <div className="">
