@@ -154,7 +154,7 @@ focus:ring-yellow-300 rounded-xl m-3 p-3" onClick={() => selectItem(previous)} >
 
                     {item.images.length > 0 && <div id={'images' + index}>
                         {item.images.map((image: string) => (
-                            <div id="link-pictures" key={image} className="justify-self-center">
+                            <div id="link-pictures" key={image} className="justify-self-center mid">
                                 <Link href={image} target='_page'>
                                     <Picture image={image} alt={image}></Picture>
                                 </Link>
@@ -164,16 +164,17 @@ focus:ring-yellow-300 rounded-xl m-3 p-3" onClick={() => selectItem(previous)} >
 
                     {item.links.length > 0 && <div id="links">
                         {item.links.map((link: LinkParts) => (
-                            <div key={link.linkAttributes.href} className="justify-self-center">
+                            <div key={link.linkAttributes.href} className="justify-self-center mid">
                                 <LinkRender link={link}></LinkRender>
                             </div>
                         ))}
                     </div>}
 
                     {item.videos.map((vid: string) => (
-                        <div id="videos" key={vid} className=" m-2 justify-self-center">
+                        <div id="videos" key={vid} className="mid m-2 justify-self-center">
                             <Link href={vid} target='_page'>
-                                <div title={vid} className="text-center">-</div></Link>
+                                <div title={vid} className="text-center">-</div>
+                            </Link>
                             <video src={'../' + vid} controls>
                                 Your browser does not support the video tag.
                             </video>
