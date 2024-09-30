@@ -6,6 +6,8 @@ import LinkRender from "./linkRender";
 import Picture from "./picture";
 import StopPicker from "./stop-picker";
 import useSwipe from "@/utils/useSwipe";
+import { display, displayShort } from "@/utils/dates";
+import Comments from "./comments";
 
 type Props = {
     allPosts: any,
@@ -21,7 +23,6 @@ const convert = (item: any): BlogPost => {
     blog.links = blog.links.map((l: any) => l as LinkParts);
     return blog;
 };
-
 
 const Posts = (props: Props) => {
 
@@ -52,39 +53,9 @@ const Posts = (props: Props) => {
 
     };
 
-    const display = (dateObj: any): string => {
-        const date = dateObj instanceof Date ? dateObj : new Date(dateObj);
-        const options = {
-            dateStyle: 'full',
-            timeStyle: 'short',
-        };
 
-        try {
-            // @ts-ignore
-            const output = new Intl.DateTimeFormat('en-GB', options).format(date);// Should use react-intl
-            return output;
-        } catch (er) {
-            console.error('trying to display', date, er);
-        }
-        return '';
-    }
 
-    const displayShort = (dateObj: any): string => {
-        const date = dateObj instanceof Date ? dateObj : new Date(dateObj);
-        const options = {
-            dateStyle: 'short',
-            timeStyle: 'short',
-        };
 
-        try {
-            // @ts-ignore
-            const output = new Intl.DateTimeFormat('en-GB', options).format(date);// Should use react-intl
-            return output;
-        } catch (er) {
-            console.error('trying to display', date, er);
-        }
-        return '';
-    }
 
     const swipeHandlers = useSwipe({ onSwipedLeft: () => selectItem(previous), onSwipedRight: () => selectItem(next) });
 
@@ -122,6 +93,8 @@ const Posts = (props: Props) => {
 focus:ring-yellow-300 rounded-xl m-3 p-3" onClick={() => selectItem(previous)} >
                                 ❮
                             </button>}
+                            {index == FIRST_BLOG && <div></div>}
+
                             <div className="mt-5 text-3xl">{displayShort(item.date)}</div>
                             {index < LAST_BLOG && <button title={"" + next} className="float-right text-gray-500 bg-sky-200 hover:bg-blue-200 focus:outline-none focus:ring focus:ring-yellow-300 rounded-xl m-3 p-3" onClick={() => selectItem(next)}>
                                 ❯
@@ -134,22 +107,9 @@ focus:ring-yellow-300 rounded-xl m-3 p-3" onClick={() => selectItem(previous)} >
 
                     {item.description.length > 0 &&
                         <div id={'desc-' + index}>
-
                             {item.description.map((desc: string) => (<p key={desc} className="p-6 ">{desc}</p>))}
-
-                            {item.comments.length > 0 &&
-                                <div className="m-10 w-10/12">
-                                    {item.comments.map((comment: any, commentIndex: number) => (
-                                        <div key={'bc-' + index + commentIndex} className="lg:grid lg:grid-cols-[4.5fr,1fr,10fr] lg:gap-5 mt-3 ">
-                                            <div className="">{display(comment.date)}</div>
-                                            <div className="font-bold">{comment.author}</div>
-                                            <div className="">
-                                                {comment.content.map((comment: string) => (<p key={comment} className="col-span-5">{comment}</p>))}
-                                            </div>
-                                        </div>
-                                    ))}
-                                </div>}
-
+                            {item.comments.length > 0 && <div className="hidden lg:block">
+                                <Comments index={index} item={item}></Comments></div>}
                         </div>}
 
                     {item.images.length > 0 && <div id={'images' + index}>
@@ -180,6 +140,9 @@ focus:ring-yellow-300 rounded-xl m-3 p-3" onClick={() => selectItem(previous)} >
                             </video>
                         </div>
                     ))}
+
+                    {item.comments.length > 0 && <div className="lg:hidden">
+                        <Comments index={index} item={item}></Comments></div>}
 
                 </div>
             </article>
