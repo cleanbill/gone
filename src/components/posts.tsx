@@ -8,6 +8,7 @@ import StopPicker from "./stop-picker";
 import useSwipe from "@/utils/useSwipe";
 import { display, displayShort } from "@/utils/dates";
 import Comments from "./comments";
+import { useRouter } from 'next/navigation'
 
 type Props = {
     allPosts: any,
@@ -34,6 +35,8 @@ const Posts = (props: Props) => {
     const [previous, setPrevious] = useState(LAST_BLOG);
     const [ready, setReady] = useState(false)
 
+    const router = useRouter();
+
     useEffect(() => {
         selectItem(parseInt(props.index));
         setReady(true);
@@ -48,14 +51,10 @@ const Posts = (props: Props) => {
         const blog = convert(item);
 
         setItem(blog);
-        window.history.replaceState({}, '', '../blog/' + index);
-        //   router.push('/blog/' + index); too slow
+        window.history.replaceState({}, '', '../blog/' + index); // works better than shallow navigation
+        // router.push('/blog/' + index, undefined, { shallow: true });
 
     };
-
-
-
-
 
     const swipeHandlers = useSwipe({ onSwipedLeft: () => selectItem(previous), onSwipedRight: () => selectItem(next) });
 
@@ -103,7 +102,7 @@ focus:ring-yellow-300 rounded-xl m-3 p-3" onClick={() => selectItem(previous)} >
                     </h3>
                 </>}
 
-                <div className={item.description.length > 0 ? "ml-1 mr-1 lg:ml-40 lg:mr-40 lg:grid lg:grid-cols-[5fr,7fr]" : "lg:mid"} >
+                <div className={item.description.length > 0 ? "ml-1 mr-1 lg:ml-40 lg:mr-40 lg:grid lg:grid-cols-[3fr,7fr]" : "lg:mid"} >
 
                     {item.description.length > 0 &&
                         <div id={'desc-' + index}>
