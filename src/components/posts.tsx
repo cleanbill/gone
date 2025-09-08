@@ -3,8 +3,11 @@ import { BlogComment, BlogPost, FIRST_BLOG, LAST_BLOG, LinkParts } from "@/types
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import LinkRender from "./linkRender";
+import LinkRenderSmall from "./linkRenderSmall";
 import Picture from "./picture";
+import Image from "next/image";
 import StopPicker from "./stop-picker";
+import CeylonPicker from "./ceylon-picker";
 import useSwipe from "@/utils/useSwipe";
 import { display, displayShort } from "@/utils/dates";
 import Comments from "./comments";
@@ -16,12 +19,25 @@ type Props = {
 }
 const convert = (item: any): BlogPost => {
     const blog: any = { ...item };
+    if (Object.keys(blog).length == 0) {
+        blog.date = new Date().getTime();
+        blog.country = "Nowhere";
+        blog.times = "";
+        blog.title = "Out of range";
+        blog.description = ["There is nothing here"];
+        blog.links = [];
+        blog.images = [];
+        blog.videos = [];
+        blog.comments = [];
+        blog.rubbish = [];
+    }
     blog.date = new Date(blog.date);
     blog.comments = blog.comments.map((bc: BlogComment) => {
         bc.date = new Date(bc.date);
         return bc;
     })
     blog.links = blog.links.map((l: any) => l as LinkParts);
+
     return blog;
 };
 
@@ -58,12 +74,16 @@ const Posts = (props: Props) => {
 
     const swipeHandlers = useSwipe({ onSwipedLeft: () => selectItem(previous), onSwipedRight: () => selectItem(next) });
 
+    const first = item.type == "Ceylon" ? 244:  FIRST_BLOG;
+    const last = item.type == "Ceylon" ? 258:  LAST_BLOG;
+ 
     return (
         ready && <div {...swipeHandlers} className="lg:grid lg:grid-cols-[0.5fr,12fr]">
             <div className="hidden lg:block text-4xl pl-1 pt-10">
 
                 <div className="text-xs">
-                    <StopPicker picked={selectItem}></StopPicker>
+		    {item.type != "Ceylon" && <StopPicker picked={selectItem}></StopPicker>}
+		    {item.type == "Ceylon" && <CeylonPicker picked={selectItem}></CeylonPicker>}
                 </div>
             </div>
             {/* <a href='https://www.google.com/maps/d/edit?mid=1HKAM6Y-IvZQud_Wjfpeu4oAMVCg&usp=sharing'>
@@ -76,26 +96,26 @@ const Posts = (props: Props) => {
 
                     <h3 className="hidden lg:block text-center pb-5 ">
 
-                        {index > FIRST_BLOG && <button title={"" + (index - 1)} className=" text-gray-500 bg-sky-200 hover:bg-blue-200 focus:outline-none focus:ring 
+                        {index > first && <button title={"" + (index - 1)} className=" text-gray-500 bg-sky-200 hover:bg-blue-200 focus:outline-none focus:ring 
                  focus:ring-yellow-300 rounded-xl m-3 p-3" onClick={() => selectItem(previous)} >
                             ❮ previous
                         </button>}
                         {display(item.date)}
-                        {index < LAST_BLOG && <button title={"" + next} className=" text-gray-500 bg-sky-200 hover:bg-blue-200 focus:outline-none focus:ring 
+                        {index < last && <button title={"" + next} className=" text-gray-500 bg-sky-200 hover:bg-blue-200 focus:outline-none focus:ring 
                  focus:ring-yellow-300 rounded-xl m-3 p-3" onClick={() => selectItem(next)}>
                             Next ❯
                         </button>}
                     </h3>
                     <h3 className="lg:hidden text-center pb-5 w-full ">
                         <span className="grid grid-cols-[0fr,11fr,0fr]">
-                            {index > FIRST_BLOG && <button title={"" + (index - 1)} className=" float-left text-gray-500 bg-sky-200 hover:bg-blue-200 focus:outline-none focus:ring 
+                            {index > first && <button title={"" + (index - 1)} className=" float-left text-gray-500 bg-sky-200 hover:bg-blue-200 focus:outline-none focus:ring 
 focus:ring-yellow-300 rounded-xl m-3 p-3" onClick={() => selectItem(previous)} >
                                 ❮
                             </button>}
-                            {index == FIRST_BLOG && <div></div>}
+                            {index == first && <div></div>}
 
                             <div className="mt-5 text-3xl">{displayShort(item.date)}</div>
-                            {index < LAST_BLOG && <button title={"" + next} className="float-right text-gray-500 bg-sky-200 hover:bg-blue-200 focus:outline-none focus:ring focus:ring-yellow-300 rounded-xl m-3 p-3" onClick={() => selectItem(next)}>
+                            {index < last && <button title={"" + next} className="float-right text-gray-500 bg-sky-200 hover:bg-blue-200 focus:outline-none focus:ring focus:ring-yellow-300 rounded-xl m-3 p-3" onClick={() => selectItem(next)}>
                                 ❯
                             </button>}
                         </span>
@@ -111,9 +131,26 @@ focus:ring-yellow-300 rounded-xl m-3 p-3" onClick={() => selectItem(previous)} >
                                 <Comments index={index} item={item}></Comments></div>}
                         </div>}
 
-                    {item.images.length > 0 && <div id={'images' + index}>
-                        {item.images.map((image: string) => (
-                            <div id="link-pictures" key={image} className="justify-self-center mid">
+    			{(item.type == "Ceylon" && item.images.length > 0) && <div id={'images' + index} className="grid gap-1 grid-cols-3 bg-blue-100 rounded-md p-3 ">
+                        {item.images.map((image: string, i:number) => (
+                            <div id="link-pictures" key={image+i} className="justify-self-center place-content-center">
+                                <Link href={image} target='_page'>
+			           <Image priority className="justify-self-center rounded-3xl"
+                        		        alt={image}
+                            			title={image}
+                            			src={image}
+                            			width={350}
+                            			height={50} >
+                        	   </Image>
+                                </Link>
+                            </div>
+                        ))}
+                    </div>}
+
+
+                    {(item.type != "Ceylon" && item.images.length > 0) && <div id={'images' + index}>
+                        {item.images.map((image: string,i:number) => (
+                            <div id="link-pictures" key={image+i} className="justify-self-center mid">
                                 <Link href={image} target='_page'>
                                     <Picture image={image} alt={image}></Picture>
                                 </Link>
@@ -121,13 +158,25 @@ focus:ring-yellow-300 rounded-xl m-3 p-3" onClick={() => selectItem(previous)} >
                         ))}
                     </div>}
 
-                    {item.links.length > 0 && <div id="links">
+                     {item.type == "Ceylon" && 
+			<div id="small-links" className="grid grid-cols-3 gap-1">
+                        {item.links.map((link: LinkParts) => (
+                            <div key={link.linkAttributes.href} className="justify-self-center mid">
+                                <LinkRenderSmall link={link}></LinkRenderSmall>
+                            </div>
+                        ))}
+                    </div>}
+
+
+                    {(item.type != "Ceylon" && item.links.length > 0) && 
+			<div id="links">
                         {item.links.map((link: LinkParts) => (
                             <div key={link.linkAttributes.href} className="justify-self-center mid">
                                 <LinkRender link={link}></LinkRender>
                             </div>
                         ))}
-                    </div>}
+                        </div>
+		    }
 
                     {item.videos.map((vid: string) => (
                         <div id="videos" key={vid} className="mid m-2 justify-self-center">

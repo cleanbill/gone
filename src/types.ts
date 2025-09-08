@@ -53,7 +53,8 @@ export type BlogPost = {
     date: Date,
     country: string,
     times: Array<string>,
-    title: string
+    title: string,
+    type?: "Ceylon",
     description: Array<string>,
     links: Array<LinkParts>,
     images: Array<string>,
