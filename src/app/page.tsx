@@ -9,8 +9,11 @@ const First = () => {
 
     console.log('Welcome');
 
+    const router = useRouter();
+
     const go = (start:number) =>{
-	    window.location="/blog/"+start;
+	    //window.location="/blog/"+start;
+	    router.push('/blog/' + start);
     }
 
     const [start, setStart] = useState(false);
