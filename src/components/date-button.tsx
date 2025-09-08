@@ -14,7 +14,7 @@ const DateButton = (props: Props) => {
 
     return (
         <>
-            <button onClick={() => select(index+244)} title={index + 244} key={index}
+            <button onClick={() => select(index+244)} title={"" + index + 244} key={index}
                 className="mt-1 text-gray-500 bg-sky-200 hover:bg-blue-200 focus:outline-none focus:ring 
                  focus:ring-yellow-300 rounded-xl h-10 w-24 p-2 ">{name}</button>
 
