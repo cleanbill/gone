@@ -12,6 +12,7 @@ import useSwipe from "@/utils/useSwipe";
 import { display, displayShort } from "@/utils/dates";
 import Comments from "./comments";
 import { useRouter } from 'next/navigation'
+import FullScreenImageGallery from "./fullScreenImageGallery";
 
 type Props = {
     allPosts: any,
@@ -49,7 +50,9 @@ const Posts = (props: Props) => {
     const [index, setIndex] = useState(FIRST_BLOG);
     const [next, setNext] = useState(FIRST_BLOG + 1);
     const [previous, setPrevious] = useState(LAST_BLOG);
-    const [ready, setReady] = useState(false)
+    const [ready, setReady] = useState(false);
+    const [viewMode, setViewMode] = useState("normal");
+    const [pictureIndex, setPictureIndex] = useState(0);
 
     const router = useRouter();
 
@@ -76,6 +79,21 @@ const Posts = (props: Props) => {
 
     const first = item.type == "Ceylon" ? 244 : item.type == "Music" ? 260 : FIRST_BLOG;
     const last = item.type == "Ceylon" ? 258 : item.type == "Music" ? 260 : LAST_BLOG;
+
+    if (viewMode === 'gallery') {
+        return (
+            <FullScreenImageGallery
+                images={item.images}
+                index={pictureIndex}
+                exitGallery={() => { setViewMode("normal") }}
+            />
+        );
+    }
+
+    const goFull = (i: number) => {
+        setPictureIndex(i);
+        setViewMode('gallery');
+    }
 
     return (
         ready && <div {...swipeHandlers} className="lg:grid lg:grid-cols-[0.5fr,12fr]">
@@ -131,6 +149,7 @@ focus:ring-yellow-300 rounded-xl m-3 p-3" onClick={() => selectItem(previous)} >
                                 <Comments index={index} item={item}></Comments></div>}
                         </div>}
 
+
                     {(item.type == "WFR" && item.images.length > 0)
                         && <div id={'images' + index} className="grid gap-1 grid-cols-3 bg-blue-100 rounded-md p-3 ">
                             {item.images.map((image: string, i: number) => (
@@ -152,7 +171,7 @@ focus:ring-yellow-300 rounded-xl m-3 p-3" onClick={() => selectItem(previous)} >
                         && <div id={'images' + index} className="col-span-2 grid gap-1 grid-cols-10 bg-blue-100 rounded-md p-3 ">
                             {item.images.map((image: string, i: number) => (
                                 <div id="link-pictures" key={image + i} className="justify-self-center place-content-center">
-                                    <Link href={image} target='_page'>
+                                    <button onClick={() => goFull(i)} >
                                         <Image priority className="justify-self-center rounded-3xl"
                                             alt={image}
                                             title={image}
@@ -160,7 +179,7 @@ focus:ring-yellow-300 rounded-xl m-3 p-3" onClick={() => selectItem(previous)} >
                                             width={350}
                                             height={50} >
                                         </Image>
-                                    </Link>
+                                    </button>
                                 </div>
                             ))}
                         </div>}
