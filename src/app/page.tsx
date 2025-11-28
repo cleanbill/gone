@@ -29,8 +29,8 @@ const First = () => {
 				<p className="text-blue-500">The southern Indian cicadas begin <a title="click me" className="text-blue-800" href="https://www.discoverwildlife.com/animal-facts/insects-invertebrates/cicada-song-pre-dawn-light-india">singing</a> when the sun</p>
 				<p className="text-blue-500">is exactly 3.8 degrees below the horizon – a moment known as <a title="click me" className="text-blue-800" href="https://www.youtube.com/watch?v=H9Ev1KzZby0">civil twilight</a>.</p>
 			</button>
-			<button onClick={() => go(259)} className="lg:mt-36 border-4 border-blue-300 p-4 bg-yellow-300 rounded-3xl lg:w-3/5 justify-self-center">
-				<Link className="pt-100 h-full text-8xl" href="/blog/259">Attic Music</Link>
+			<button onClick={() => go(260)} className="lg:mt-36 border-4 border-blue-300 p-4 bg-yellow-300 rounded-3xl lg:w-3/5 justify-self-center">
+				<Link className="pt-100 h-full text-8xl" href="/blog/260">Attic Music</Link>
 				<p className="text-blue-500">Can't keep it, can't throw it...
 					Really should sort it: some should be binned, some should be framed.</p>
 			</button>

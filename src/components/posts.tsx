@@ -74,16 +74,16 @@ const Posts = (props: Props) => {
 
     const swipeHandlers = useSwipe({ onSwipedLeft: () => selectItem(previous), onSwipedRight: () => selectItem(next) });
 
-    const first = item.type == "Ceylon" ? 244:  FIRST_BLOG;
-    const last = item.type == "Ceylon" ? 258:  LAST_BLOG;
- 
+    const first = item.type == "Ceylon" ? 244 : item.type == "Music" ? 260 : FIRST_BLOG;
+    const last = item.type == "Ceylon" ? 258 : item.type == "Music" ? 260 : LAST_BLOG;
+
     return (
         ready && <div {...swipeHandlers} className="lg:grid lg:grid-cols-[0.5fr,12fr]">
             <div className="hidden lg:block text-4xl pl-1 pt-10">
 
                 <div className="text-xs">
-		    {item.type != "Ceylon" && <StopPicker picked={selectItem}></StopPicker>}
-		    {item.type == "Ceylon" && <CeylonPicker picked={selectItem}></CeylonPicker>}
+                    {item.type == "WFR" && <StopPicker picked={selectItem}></StopPicker>}
+                    {item.type == "Ceylon" && <CeylonPicker picked={selectItem}></CeylonPicker>}
                 </div>
             </div>
             {/* <a href='https://www.google.com/maps/d/edit?mid=1HKAM6Y-IvZQud_Wjfpeu4oAMVCg&usp=sharing'>
@@ -124,33 +124,51 @@ focus:ring-yellow-300 rounded-xl m-3 p-3" onClick={() => selectItem(previous)} >
 
                 <div className={item.description.length > 0 ? "ml-1 mr-1 lg:ml-40 lg:mr-40 lg:grid lg:grid-cols-[3fr,7fr]" : "lg:mid"} >
 
-                    {item.description.length > 0 &&
+                    {item.type != "Music" && item.description.length > 0 &&
                         <div id={'desc-' + index}>
                             {item.description.map((desc: string) => (<p key={desc} className="p-6 ">{desc}</p>))}
                             {item.comments.length > 0 && <div className="hidden lg:block">
                                 <Comments index={index} item={item}></Comments></div>}
                         </div>}
 
-    			{(item.type == "Ceylon" && item.images.length > 0) && <div id={'images' + index} className="grid gap-1 grid-cols-3 bg-blue-100 rounded-md p-3 ">
-                        {item.images.map((image: string, i:number) => (
-                            <div id="link-pictures" key={image+i} className="justify-self-center place-content-center">
-                                <Link href={image} target='_page'>
-			           <Image priority className="justify-self-center rounded-3xl"
-                        		        alt={image}
-                            			title={image}
-                            			src={image}
-                            			width={350}
-                            			height={50} >
-                        	   </Image>
-                                </Link>
-                            </div>
-                        ))}
-                    </div>}
+                    {(item.type == "WFR" && item.images.length > 0)
+                        && <div id={'images' + index} className="grid gap-1 grid-cols-3 bg-blue-100 rounded-md p-3 ">
+                            {item.images.map((image: string, i: number) => (
+                                <div id="link-pictures" key={image + i} className="justify-self-center place-content-center">
+                                    <Link href={image} target='_page'>
+                                        <Image priority className="justify-self-center rounded-3xl"
+                                            alt={image}
+                                            title={image}
+                                            src={image}
+                                            width={350}
+                                            height={50} >
+                                        </Image>
+                                    </Link>
+                                </div>
+                            ))}
+                        </div>}
+
+                    {(item.type == "Music" && item.images.length > 0)
+                        && <div id={'images' + index} className="col-span-2 grid gap-1 grid-cols-10 bg-blue-100 rounded-md p-3 ">
+                            {item.images.map((image: string, i: number) => (
+                                <div id="link-pictures" key={image + i} className="justify-self-center place-content-center">
+                                    <Link href={image} target='_page'>
+                                        <Image priority className="justify-self-center rounded-3xl"
+                                            alt={image}
+                                            title={image}
+                                            src={image}
+                                            width={350}
+                                            height={50} >
+                                        </Image>
+                                    </Link>
+                                </div>
+                            ))}
+                        </div>}
 
 
-                    {(item.type != "Ceylon" && item.images.length > 0) && <div id={'images' + index}>
-                        {item.images.map((image: string,i:number) => (
-                            <div id="link-pictures" key={image+i} className="justify-self-center mid">
+                    {(item.type == "WFR" && item.images.length > 0) && <div id={'images' + index}>
+                        {item.images.map((image: string, i: number) => (
+                            <div id="link-pictures" key={image + i} className="justify-self-center mid">
                                 <Link href={image} target='_page'>
                                     <Picture image={image} alt={image}></Picture>
                                 </Link>
@@ -158,25 +176,25 @@ focus:ring-yellow-300 rounded-xl m-3 p-3" onClick={() => selectItem(previous)} >
                         ))}
                     </div>}
 
-                     {item.type == "Ceylon" && 
-			<div id="small-links" className="grid grid-cols-3 gap-1">
-                        {item.links.map((link: LinkParts) => (
-                            <div key={link.linkAttributes.href} className="justify-self-center mid">
-                                <LinkRenderSmall link={link}></LinkRenderSmall>
-                            </div>
-                        ))}
-                    </div>}
+                    {item.type != "WFR" &&
+                        <div id="small-links" className="grid grid-cols-3 gap-1">
+                            {item.links.map((link: LinkParts) => (
+                                <div key={link.linkAttributes.href} className="justify-self-center mid">
+                                    <LinkRenderSmall link={link}></LinkRenderSmall>
+                                </div>
+                            ))}
+                        </div>}
 
 
-                    {(item.type != "Ceylon" && item.links.length > 0) && 
-			<div id="links">
-                        {item.links.map((link: LinkParts) => (
-                            <div key={link.linkAttributes.href} className="justify-self-center mid">
-                                <LinkRender link={link}></LinkRender>
-                            </div>
-                        ))}
+                    {(item.type == "WFR" && item.links.length > 0) &&
+                        <div id="links">
+                            {item.links.map((link: LinkParts) => (
+                                <div key={link.linkAttributes.href} className="justify-self-center mid">
+                                    <LinkRender link={link}></LinkRender>
+                                </div>
+                            ))}
                         </div>
-		    }
+                    }
 
                     {item.videos.map((vid: string) => (
                         <div id="videos" key={vid} className="mid m-2 justify-self-center">
