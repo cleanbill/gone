@@ -184,6 +184,23 @@ focus:ring-yellow-300 rounded-xl m-3 p-3" onClick={() => selectItem(previous)} >
                             ))}
                         </div>}
 
+                    {(item.type == "Ceylon" && item.images.length > 0)
+                        && <div id={'images' + index} className="col-span-2 grid gap-1 grid-cols-3 bg-blue-100 rounded-md p-3 ">
+                            {item.images.map((image: string, i: number) => (
+                                <div id="link-pictures" key={image + i} className="justify-self-center place-content-center">
+                                    <button onClick={() => goFull(i)} >
+                                        <Image priority className="justify-self-center rounded-3xl"
+                                            alt={image}
+                                            title={image}
+                                            src={image}
+                                            width={350}
+                                            height={200} >
+                                        </Image>
+                                    </button>
+                                </div>
+                            ))}
+                        </div>}
+
 
                     {(item.type == "WFR" && item.images.length > 0) && <div id={'images' + index}>
                         {item.images.map((image: string, i: number) => (
