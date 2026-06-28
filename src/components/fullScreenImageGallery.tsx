@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
+import useSwipe from '@/utils/useSwipe';
 
 const FullScreenImageGallery = ({ images: items, exitGallery, index }: { images: string[], exitGallery: () => void, index: number }) => {
     const [currentIndex, setCurrentIndex] = useState(index);
@@ -16,6 +17,11 @@ const FullScreenImageGallery = ({ images: items, exitGallery, index }: { images:
             setCurrentIndex((prev) => (prev - 1 + items.length) % items.length);
         }
     };
+
+    const swipeHandlers = useSwipe({
+        onSwipedLeft: () => navigate('next'),
+        onSwipedRight: () => navigate('prev'),
+    });
 
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
@@ -99,7 +105,7 @@ const FullScreenImageGallery = ({ images: items, exitGallery, index }: { images:
 
 
             {/* Main Image View */}
-            <div className={"max-w-full max-h-full flex flex-col items-center justify-center p-4"}>
+            <div {...swipeHandlers} className={"max-w-full max-h-full flex flex-col items-center justify-center p-4"}>
 
                 {/* Navigation Buttons */}
                 <button
